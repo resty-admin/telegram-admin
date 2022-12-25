@@ -1,0 +1,3 @@
+export const STICKERS = {
+	hello: "CAACAgIAAxkBAAMGY4uQ3dWEcbiuxm9JkqNMaD91vWAAAuIbAAINU8FLw18BZzJW1MIrBA"
+};
