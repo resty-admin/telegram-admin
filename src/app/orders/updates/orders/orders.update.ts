@@ -1,7 +1,7 @@
 import { Action, InjectBot, Update } from "nestjs-telegraf";
 import { ANY_SYMBOL } from "src/app/shared/constants";
 import { OrdersEvents } from "src/app/shared/enums";
-import { IOrder } from "src/app/shared/interfaces/orders";
+import { IOrder, IOrderCreated } from "src/app/shared/interfaces/orders";
 import { OnSocketEvent } from "src/app/shared/socket-io";
 import { Telegraf } from "telegraf";
 
@@ -103,6 +103,29 @@ ${users.reduce((_text, { user }) => `${_text}${user.name}\n`, "")}
 
 			return "done";
 		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	@OnSocketEvent(OrdersEvents.ORDER_CREATED)
+	async orderCreatedNotifyWaiter(order: IOrderCreated) {
+		if (order.waiters.length === 0) {
+			return;
+		}
+		
+		try {
+				const { orderNumber, table, type, waiters } = order;
+
+			const text = `
+Новый заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>. 
+`;
+			for (const waiter of waiters) {
+				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
+					parse_mode: "HTML"
+				});
+			}
+		}
+		catch (error) {
 			console.error(error);
 		}
 	}
