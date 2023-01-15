@@ -35,7 +35,17 @@ jobs:
             docker build --no-cache -f Dockerfile.dev -t $(echo $REGISTRY)/$(echo $TELEGRAM_ADMIN):latest .
 
             doctl registry login
-            docker push $(echo $REGISTRY)/$(echo $TELEGRAM_ADMIN):latest
+            
+            isDisabled=true
+            while $isDisabled; do
+            if doctl registry garbage-collection get-active; then
+              echo "already running"
+            else
+              docker push $(echo $REGISTRY)/$(echo $TELEGRAM_ADMIN):latest
+              doctl registry garbage-collection start --include-untagged-manifests --force
+              isDisabled=false
+            fi
+            done
 
             cd /home/resty/k8s
             kubectl apply -f cloudflared.yaml
