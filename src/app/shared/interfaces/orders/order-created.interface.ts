@@ -1,6 +1,6 @@
+import type { IProduct } from "../products";
 import type { IUser } from "../users";
 import type { IOrder } from "./order.interface";
-import {IProduct} from "../products";
 
 
 export interface IOrderEvent {

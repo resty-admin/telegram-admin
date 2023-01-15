@@ -155,6 +155,54 @@ export class OrdersUpdate {
 		}
 	}
 
+	@OnSocketEvent(OrdersEvents.CONFIRM)
+	async orderConfirmNotifyWaiter(orderEvent: IOrderEvent) {
+		if (orderEvent.waiters.length === 0) {
+			return;
+		}
+
+		try {
+			const { orderNumber, table, type } = orderEvent.order;
+
+			const text = `
+Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
+Новые блюда ожидают подтверждения. 
+`;
+			for (const waiter of orderEvent.waiters) {
+				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
+					parse_mode: "HTML"
+				});
+			}
+		}
+		catch (error) {
+			console.error(error);
+		}
+	}
+
+	@OnSocketEvent(OrdersEvents.WAITING_FOR_MANUAL_PAY)
+	async orderWaitingForManualPayNotifyWaiter(orderEvent: IOrderEvent) {
+		if (orderEvent.waiters.length === 0) {
+			return;
+		}
+
+		try {
+			const { orderNumber, table, type } = orderEvent.order;
+
+			const text = `
+Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
+Пользователь запросил ручную оплату. 
+`;
+			for (const waiter of orderEvent.waiters) {
+				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
+					parse_mode: "HTML"
+				});
+			}
+		}
+		catch (error) {
+			console.error(error);
+		}
+	}
+
 	@OnSocketEvent(OrdersEvents.USER_ADDED)
 	async addUserToOrderNotifyWaiter(orderEvent: IOrderEventUserAdded) {
 		if (orderEvent.waiters.length === 0) {
@@ -167,54 +215,6 @@ export class OrdersUpdate {
 			const text = `
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
 Добавлен пользователь ${orderEvent.user.name} 
-`;
-			for (const waiter of orderEvent.waiters) {
-				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
-					parse_mode: "HTML"
-				});
-			}
-		}
-		catch (error) {
-			console.error(error);
-		}
-	}
-
-	@OnSocketEvent(OrdersEvents.PRODUCT_ADDED)
-	async addProductToOrderNotifyWaiter(orderEvent: IOrderEventProductAdded) {
-		if (orderEvent.waiters.length === 0) {
-			return;
-		}
-
-		try {
-			const { orderNumber, table, type } = orderEvent.order;
-
-			const text = `
-Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
-Добавлен продукт ${orderEvent.product}
-`;
-			for (const waiter of orderEvent.waiters) {
-				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
-					parse_mode: "HTML"
-				});
-			}
-		}
-		catch (error) {
-			console.error(error);
-		}
-	}
-
-	@OnSocketEvent(OrdersEvents.PRODUCT_REMOVED)
-	async removeProductToOrderNotifyWaiter(orderEvent: IOrderEventProductAdded) {
-		if (orderEvent.waiters.length === 0) {
-			return;
-		}
-
-		try {
-			const { orderNumber, table, type } = orderEvent.order;
-
-			const text = `
-Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
-Удален продукт ${orderEvent.product}
 `;
 			for (const waiter of orderEvent.waiters) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
