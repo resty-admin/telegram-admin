@@ -1,14 +1,14 @@
-name: Deploy to Dev
+name: Deploy to Prod
 
 #on: [push]
 on:
   push:
     branches:
-      - dev
+      - main
 
 env:
   REGISTRY: "registry.digitalocean.com/resty-registry"
-  TELEGRAM_ADMIN: "dev-telegram-admin"
+  TELEGRAM_ADMIN: "prod-telegram-admin"
 
 jobs:
   deploy:
@@ -29,10 +29,10 @@ jobs:
           script: |
             cd /home/resty/telegram-admin
             git fetch
-            git checkout dev
+            git checkout main
             git pull
             docker system prune -f --volumes
-            docker build --no-cache -f Dockerfile.dev -t $(echo $REGISTRY)/$(echo $TELEGRAM_ADMIN):latest .
+            docker build --no-cache -f Dockerfile -t $(echo $REGISTRY)/$(echo $TELEGRAM_ADMIN):latest .
 
             doctl registry login
             docker push $(echo $REGISTRY)/$(echo $TELEGRAM_ADMIN):latest
@@ -40,5 +40,5 @@ jobs:
             cd /home/resty/k8s
             kubectl apply -f cloudflared.yaml
             cd /home/resty/telegram-admin
-            kubectl delete -f telegram-admin.dev.k8s.yaml
-            kubectl apply -f telegram-admin.dev.k8s.yaml
+            kubectl delete -f telegram-admin.k8s.yaml
+            kubectl apply -f telegram-admin.k8s.yaml
