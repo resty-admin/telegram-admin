@@ -1,6 +1,7 @@
 import { InjectBot, Update } from "nestjs-telegraf";
 import { OrdersEvents } from "src/app/shared/enums";
 import {
+	IOrder,
 	IOrderEvent,
 	IOrderEventProductAdded,
 	IOrderEventTableAdded,
@@ -111,17 +112,18 @@ export class OrdersUpdate {
 
 	@OnSocketEvent(OrdersEvents.CREATED)
 	async orderCreatedNotifyWaiter(orderEvent: IOrderEvent) {
-		if (orderEvent.waiters.length === 0) {
+
+		if (orderEvent.employees.length === 0) {
 			return;
 		}
-		
+
 		try {
 				const { orderNumber, table, type } = orderEvent.order;
 
 			const text = `
-Новый заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>. 
+Новый заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
 `;
-			for (const waiter of orderEvent.waiters) {
+			for (const waiter of orderEvent.employees) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
@@ -134,7 +136,7 @@ export class OrdersUpdate {
 
 	@OnSocketEvent(OrdersEvents.CLOSED)
 	async orderClosedNotifyWaiter(orderEvent: IOrderEvent) {
-		if (orderEvent.waiters.length === 0) {
+		if (orderEvent.employees.length === 0) {
 			return;
 		}
 
@@ -144,7 +146,7 @@ export class OrdersUpdate {
 			const text = `
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b> закрыт. 
 `;
-			for (const waiter of orderEvent.waiters) {
+			for (const waiter of orderEvent.employees) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
@@ -157,7 +159,7 @@ export class OrdersUpdate {
 
 	@OnSocketEvent(OrdersEvents.CONFIRM)
 	async orderConfirmNotifyWaiter(orderEvent: IOrderEvent) {
-		if (orderEvent.waiters.length === 0) {
+		if (orderEvent.employees.length === 0) {
 			return;
 		}
 
@@ -168,7 +170,7 @@ export class OrdersUpdate {
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
 Новые блюда ожидают подтверждения. 
 `;
-			for (const waiter of orderEvent.waiters) {
+			for (const waiter of orderEvent.employees) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
@@ -181,7 +183,7 @@ export class OrdersUpdate {
 
 	@OnSocketEvent(OrdersEvents.WAITING_FOR_MANUAL_PAY)
 	async orderWaitingForManualPayNotifyWaiter(orderEvent: IOrderEvent) {
-		if (orderEvent.waiters.length === 0) {
+		if (orderEvent.employees.length === 0) {
 			return;
 		}
 
@@ -192,7 +194,7 @@ export class OrdersUpdate {
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
 Пользователь запросил ручную оплату. 
 `;
-			for (const waiter of orderEvent.waiters) {
+			for (const waiter of orderEvent.employees) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
@@ -205,7 +207,7 @@ export class OrdersUpdate {
 
 	@OnSocketEvent(OrdersEvents.USER_ADDED)
 	async addUserToOrderNotifyWaiter(orderEvent: IOrderEventUserAdded) {
-		if (orderEvent.waiters.length === 0) {
+		if (orderEvent.employees.length === 0) {
 			return;
 		}
 
@@ -216,7 +218,7 @@ export class OrdersUpdate {
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
 Добавлен пользователь ${orderEvent.user.name} 
 `;
-			for (const waiter of orderEvent.waiters) {
+			for (const waiter of orderEvent.employees) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
@@ -229,7 +231,7 @@ export class OrdersUpdate {
 
 	@OnSocketEvent(OrdersEvents.TABLE_ADDED)
 	async addTableToOrderNotifyWaiter(orderEvent: IOrderEventTableAdded) {
-		if (orderEvent.waiters.length === 0) {
+		if (orderEvent.employees.length === 0) {
 			return;
 		}
 
@@ -240,7 +242,7 @@ export class OrdersUpdate {
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
 Добавлен стол ${orderEvent.table}
 `;
-			for (const waiter of orderEvent.waiters) {
+			for (const waiter of orderEvent.employees) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
@@ -253,7 +255,7 @@ export class OrdersUpdate {
 
 	@OnSocketEvent(OrdersEvents.TABLE_REMOVED)
 	async removeTableToOrderNotifyWaiter(orderEvent: IOrderEventTableAdded) {
-		if (orderEvent.waiters.length === 0) {
+		if (orderEvent.employees.length === 0) {
 			return;
 		}
 
@@ -264,7 +266,7 @@ export class OrdersUpdate {
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
 Удален стол ${orderEvent.table}
 `;
-			for (const waiter of orderEvent.waiters) {
+			for (const waiter of orderEvent.employees) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
