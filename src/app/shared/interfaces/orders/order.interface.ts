@@ -24,4 +24,6 @@ export interface IOrder {
 	totalPrice?: number;
 
 	usersToOrders?: IUserToOrder[];
+
+	waiters: IUser[];
 }

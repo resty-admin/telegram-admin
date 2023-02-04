@@ -5,7 +5,7 @@ import type { IOrder } from "./order.interface";
 
 export interface IOrderEvent {
 	order: IOrder;
-	waiters: IUser[];
+	employees: IUser[];
 }
 
 export interface IOrderEventUserAdded extends IOrderEvent {
