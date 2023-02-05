@@ -1,113 +1,61 @@
-import { InjectBot, Update } from "nestjs-telegraf";
+import { Action, Hears, InjectBot, Update } from "nestjs-telegraf";
+import { IStateContext } from "src/app/shared";
+import { ANY_SYMBOL } from "src/app/shared/constants";
 import { OrdersEvents } from "src/app/shared/enums";
 import { IOrderEvent, IOrderEventTableAdded, IOrderEventUserAdded } from "src/app/shared/interfaces/orders";
 import { OnSocketEvent } from "src/app/shared/socket-io";
 import { Telegraf } from "telegraf";
 
+import { CONFIRM_ORDER, CONFIRM_PAYMNET } from "../../constants";
 import { OrdersService } from "../../services";
 
 @Update()
 export class OrdersUpdate {
 	constructor(@InjectBot() private readonly _bot: Telegraf, private readonly _ordersService: OrdersService) {}
 
-	// @Action(CONFIRM_PAYMNET)
-	// private async _confirmPayment(context: IStateContext) {
-	// 	if (!("data" in context.callbackQuery)) {
-	// 		return;
-	// 	}
-	//
-	// 	const [, orderId] = CONFIRM_PAYMNET.exec(context.callbackQuery.data) || [];
-	//
-	// 	await this._ordersService.confirmPayment(orderId);
-	//
-	// 	await context.answerCbQuery();
-	// }
+	@Action(CONFIRM_PAYMNET)
+	private async _confirmPayment(context: IStateContext) {
+		if (!("data" in context.callbackQuery)) {
+			return;
+		}
 
-	// @Action(CONFIRM_ORDER)
-	// private async _confirmOrder(context: IStateContext) {
-	// 	if (!("data" in context.callbackQuery)) {
-	// 		return;
-	// 	}
-	//
-	// 	const [, orderId] = CONFIRM_ORDER.exec(context.callbackQuery.data) || [];
-	//
-	// 	await this._ordersService.confirmOrder(orderId);
-	//
-	// 	await context.answerCbQuery();
-	// }
+		const [, orderId] = CONFIRM_PAYMNET.exec(context.callbackQuery.data) || [];
 
-	// 	@OnSocketEvent(OrdersEvents.REQUEST_TO_CONFIRM_ORDER)
-	// 	async displayOrder(order: IOrder) {
-	// 		try {
-	// 			const { id, table, products, users } = order;
-	//
-	// 			const text = `
-	// Новый заказ за столом: ${table.code}
-	//
-	// <b>Закзали:</b>
-	//
-	// ${products.reduce((_text, { product, quantity }) => `${_text}${quantity}x	${product.name}	${product.price}грн\n`, "")}
-	//
-	// <b>Гости:</b>
-	//
-	// ${users.reduce((_text, { user }) => `${_text}${user.name}\n`, "")}
-	// `;
-	//
-	// 			for (const waiter of table.waiters.filter(({ user }) => user)) {
-	// 				await this._bot.telegram.sendMessage(waiter.user.telegramId, text, {
-	// 					parse_mode: "HTML",
-	// 					reply_markup: {
-	// 						inline_keyboard: [[{ text: "Взять в работу", callback_data: CONFIRM_ORDER.source.replace(ANY_SYMBOL, id) }]]
-	// 					}
-	// 				});
-	// 			}
-	//
-	// 			return "done";
-	// 		} catch (error) {
-	// 			console.error(error);
-	// 		}
-	// 	}
+		await this._ordersService.confirmPayment(orderId);
 
-	// 	@OnSocketEvent(OrdersEvents.REQUEST_TO_CONFIRM_PAYMENT)
-	// 	async displayPayment(order: IOrder) {
-	// 		try {
-	// 			const { id, table, products, users } = order;
-	//
-	// 			const sum = products.reduce((pre, { product, quantity }) => pre + product.price * quantity, 0);
-	//
-	// 			const text = `
-	// Оплата <b>Наличными</b> за столом: ${table.code} на сумму <b>${sum}грн</b>.
-	//
-	// <b>Блюда:</b>
-	//
-	// ${products.reduce((_text, { product, quantity }) => `${_text}${quantity}x	${product.name}	${product.price}грн\n`, "")}
-	//
-	// <b>Гости:</b>
-	//
-	// ${users.reduce((_text, { user }) => `${_text}${user.name}\n`, "")}
-	// `;
-	//
-	// 			for (const waiter of table.waiters.filter(({ user }) => user)) {
-	// 				await this._bot.telegram.sendMessage(waiter.user.telegramId, text, {
-	// 					parse_mode: "HTML",
-	// 					reply_markup: {
-	// 						inline_keyboard: [
-	// 							[{ text: "Подтвердить оплату", callback_data: CONFIRM_PAYMNET.source.replace(ANY_SYMBOL, id) }]
-	// 						]
-	// 					}
-	// 				});
-	// 			}
-	//
-	// 			return "done";
-	// 		} catch (error) {
-	// 			console.error(error);
-	// 		}
-	// 	}
+		await context.answerCbQuery();
+	}
+
+	@Action(CONFIRM_ORDER)
+	private async _confirmOrder(context: IStateContext) {
+		if (!("data" in context.callbackQuery)) {
+			return;
+		}
+
+		const [, orderId] = CONFIRM_ORDER.exec(context.callbackQuery.data) || [];
+
+		await this._ordersService.confirmOrder(orderId);
+
+		await context.answerCbQuery();
+	}
+
+	@Hears("Test")
+	async test(context: IStateContext) {
+		context.reply("test", {
+			reply_markup: {
+				inline_keyboard: [
+					[
+						{ text: "Confirm Order", callback_data: CONFIRM_ORDER.source.replace(ANY_SYMBOL, "order 1") },
+						{ text: "Confirm Payment", callback_data: CONFIRM_ORDER.source.replace(ANY_SYMBOL, "payment 1") }
+					]
+				]
+			}
+		});
+	}
 
 	@OnSocketEvent(OrdersEvents.CREATED)
 	async orderCreatedNotifyWaiter(orderEvent: IOrderEvent) {
 		if (orderEvent.employees.length === 0) {
-			console.log(orderEvent);
 			return;
 		}
 

@@ -33,6 +33,7 @@
 		"test:e2e": "jest --config ./test/jest-e2e.json"
 	},
 	"dependencies": {
+		"@apollo/client": "^3.7.7",
 		"@nestjs-modules/mailer": "^1.8.1",
 		"@nestjs/apollo": "^10.1.7",
 		"@nestjs/axios": "^1.0.1",
@@ -56,6 +57,7 @@
 		"class-transformer": "^0.5.1",
 		"class-validator": "^0.14.0",
 		"cloudipsp-node-js-sdk": "^1.0.5",
+		"cross-fetch": "^3.1.5",
 		"graphql": "^16.6.0",
 		"lodash": "^4.17.21",
 		"multer": "2.0.0-rc.4",
@@ -66,6 +68,7 @@
 		"passport-jwt": "^4.0.1",
 		"pg": "^8.8.0",
 		"random-js": "^2.1.0",
+		"react": "^18.2.0",
 		"reflect-metadata": "^0.1.13",
 		"request-ip": "^3.3.0",
 		"rimraf": "^3.0.2",
