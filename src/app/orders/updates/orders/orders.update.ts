@@ -1,12 +1,6 @@
 import { InjectBot, Update } from "nestjs-telegraf";
 import { OrdersEvents } from "src/app/shared/enums";
-import {
-	IOrder,
-	IOrderEvent,
-	IOrderEventProductAdded,
-	IOrderEventTableAdded,
-	IOrderEventUserAdded
-} from "src/app/shared/interfaces/orders";
+import { IOrderEvent, IOrderEventTableAdded, IOrderEventUserAdded } from "src/app/shared/interfaces/orders";
 import { OnSocketEvent } from "src/app/shared/socket-io";
 import { Telegraf } from "telegraf";
 
@@ -42,83 +36,83 @@ export class OrdersUpdate {
 	// 	await context.answerCbQuery();
 	// }
 
-// 	@OnSocketEvent(OrdersEvents.REQUEST_TO_CONFIRM_ORDER)
-// 	async displayOrder(order: IOrder) {
-// 		try {
-// 			const { id, table, products, users } = order;
-//
-// 			const text = `
-// Новый заказ за столом: ${table.code}
-//
-// <b>Закзали:</b>
-//
-// ${products.reduce((_text, { product, quantity }) => `${_text}${quantity}x	${product.name}	${product.price}грн\n`, "")}
-//
-// <b>Гости:</b>
-//
-// ${users.reduce((_text, { user }) => `${_text}${user.name}\n`, "")}
-// `;
-//
-// 			for (const waiter of table.waiters.filter(({ user }) => user)) {
-// 				await this._bot.telegram.sendMessage(waiter.user.telegramId, text, {
-// 					parse_mode: "HTML",
-// 					reply_markup: {
-// 						inline_keyboard: [[{ text: "Взять в работу", callback_data: CONFIRM_ORDER.source.replace(ANY_SYMBOL, id) }]]
-// 					}
-// 				});
-// 			}
-//
-// 			return "done";
-// 		} catch (error) {
-// 			console.error(error);
-// 		}
-// 	}
+	// 	@OnSocketEvent(OrdersEvents.REQUEST_TO_CONFIRM_ORDER)
+	// 	async displayOrder(order: IOrder) {
+	// 		try {
+	// 			const { id, table, products, users } = order;
+	//
+	// 			const text = `
+	// Новый заказ за столом: ${table.code}
+	//
+	// <b>Закзали:</b>
+	//
+	// ${products.reduce((_text, { product, quantity }) => `${_text}${quantity}x	${product.name}	${product.price}грн\n`, "")}
+	//
+	// <b>Гости:</b>
+	//
+	// ${users.reduce((_text, { user }) => `${_text}${user.name}\n`, "")}
+	// `;
+	//
+	// 			for (const waiter of table.waiters.filter(({ user }) => user)) {
+	// 				await this._bot.telegram.sendMessage(waiter.user.telegramId, text, {
+	// 					parse_mode: "HTML",
+	// 					reply_markup: {
+	// 						inline_keyboard: [[{ text: "Взять в работу", callback_data: CONFIRM_ORDER.source.replace(ANY_SYMBOL, id) }]]
+	// 					}
+	// 				});
+	// 			}
+	//
+	// 			return "done";
+	// 		} catch (error) {
+	// 			console.error(error);
+	// 		}
+	// 	}
 
-// 	@OnSocketEvent(OrdersEvents.REQUEST_TO_CONFIRM_PAYMENT)
-// 	async displayPayment(order: IOrder) {
-// 		try {
-// 			const { id, table, products, users } = order;
-//
-// 			const sum = products.reduce((pre, { product, quantity }) => pre + product.price * quantity, 0);
-//
-// 			const text = `
-// Оплата <b>Наличными</b> за столом: ${table.code} на сумму <b>${sum}грн</b>. 
-//
-// <b>Блюда:</b>
-//
-// ${products.reduce((_text, { product, quantity }) => `${_text}${quantity}x	${product.name}	${product.price}грн\n`, "")}
-//
-// <b>Гости:</b>
-//
-// ${users.reduce((_text, { user }) => `${_text}${user.name}\n`, "")}
-// `;
-//
-// 			for (const waiter of table.waiters.filter(({ user }) => user)) {
-// 				await this._bot.telegram.sendMessage(waiter.user.telegramId, text, {
-// 					parse_mode: "HTML",
-// 					reply_markup: {
-// 						inline_keyboard: [
-// 							[{ text: "Подтвердить оплату", callback_data: CONFIRM_PAYMNET.source.replace(ANY_SYMBOL, id) }]
-// 						]
-// 					}
-// 				});
-// 			}
-//
-// 			return "done";
-// 		} catch (error) {
-// 			console.error(error);
-// 		}
-// 	}
+	// 	@OnSocketEvent(OrdersEvents.REQUEST_TO_CONFIRM_PAYMENT)
+	// 	async displayPayment(order: IOrder) {
+	// 		try {
+	// 			const { id, table, products, users } = order;
+	//
+	// 			const sum = products.reduce((pre, { product, quantity }) => pre + product.price * quantity, 0);
+	//
+	// 			const text = `
+	// Оплата <b>Наличными</b> за столом: ${table.code} на сумму <b>${sum}грн</b>.
+	//
+	// <b>Блюда:</b>
+	//
+	// ${products.reduce((_text, { product, quantity }) => `${_text}${quantity}x	${product.name}	${product.price}грн\n`, "")}
+	//
+	// <b>Гости:</b>
+	//
+	// ${users.reduce((_text, { user }) => `${_text}${user.name}\n`, "")}
+	// `;
+	//
+	// 			for (const waiter of table.waiters.filter(({ user }) => user)) {
+	// 				await this._bot.telegram.sendMessage(waiter.user.telegramId, text, {
+	// 					parse_mode: "HTML",
+	// 					reply_markup: {
+	// 						inline_keyboard: [
+	// 							[{ text: "Подтвердить оплату", callback_data: CONFIRM_PAYMNET.source.replace(ANY_SYMBOL, id) }]
+	// 						]
+	// 					}
+	// 				});
+	// 			}
+	//
+	// 			return "done";
+	// 		} catch (error) {
+	// 			console.error(error);
+	// 		}
+	// 	}
 
 	@OnSocketEvent(OrdersEvents.CREATED)
 	async orderCreatedNotifyWaiter(orderEvent: IOrderEvent) {
-
 		if (orderEvent.employees.length === 0) {
+			console.log(orderEvent);
 			return;
 		}
 
 		try {
-				const { orderNumber, table, type } = orderEvent.order;
+			const { orderNumber, table, type } = orderEvent.order;
 
 			const text = `
 Новый заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
@@ -128,8 +122,7 @@ export class OrdersUpdate {
 					parse_mode: "HTML"
 				});
 			}
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(error);
 		}
 	}
@@ -151,8 +144,7 @@ export class OrdersUpdate {
 					parse_mode: "HTML"
 				});
 			}
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(error);
 		}
 	}
@@ -175,8 +167,7 @@ export class OrdersUpdate {
 					parse_mode: "HTML"
 				});
 			}
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(error);
 		}
 	}
@@ -199,8 +190,7 @@ export class OrdersUpdate {
 					parse_mode: "HTML"
 				});
 			}
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(error);
 		}
 	}
@@ -223,8 +213,7 @@ export class OrdersUpdate {
 					parse_mode: "HTML"
 				});
 			}
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(error);
 		}
 	}
@@ -247,8 +236,7 @@ export class OrdersUpdate {
 					parse_mode: "HTML"
 				});
 			}
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(error);
 		}
 	}
@@ -271,8 +259,7 @@ export class OrdersUpdate {
 					parse_mode: "HTML"
 				});
 			}
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(error);
 		}
 	}
