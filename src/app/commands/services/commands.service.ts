@@ -10,7 +10,7 @@ export class CommandsService {
 	async displayCommand(body: any) {
 		const { command, table } = body;
 
-		const text = `${command.name} для стола №${table.code}`;
+		const text = `${command.name} для столу №${table.code}`;
 		for (const waiter of table.waiters) {
 			await this._bot.telegram.sendMessage(waiter.user.telegramId, text);
 		}
