@@ -5,7 +5,7 @@ import { environment } from "../../../../environments/environment";
 import { IStateContext } from "../../../shared";
 
 const text = `Привіт 👋🏼
-Я – твій онлайн офіціант, Resty!
+Я - твій онлайн офіціант, Resty!
 
 Я допоможу тобі стежити за бронями та новими замовленнями 🙌🏼
 `;
