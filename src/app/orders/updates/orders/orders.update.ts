@@ -85,7 +85,7 @@ export class OrdersUpdate {
 			const { orderNumber, table, type } = orderEvent.order;
 
 			const text = `
-Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b> закрыт. 
+Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} з типом <b>${type}</b> закрыт. 
 `;
 			for (const waiter of orderEvent.employees) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
@@ -107,8 +107,8 @@ export class OrdersUpdate {
 			const { orderNumber, table, type } = orderEvent.order;
 
 			const text = `
-Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
-Новые блюда ожидают подтверждения. 
+Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} з типом <b>${type}</b>.
+Нові страви очікують на підтвердження. 
 `;
 			for (const waiter of orderEvent.employees) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
@@ -131,7 +131,7 @@ export class OrdersUpdate {
 
 			const text = `
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
-Пользователь запросил ручную оплату. 
+Користувач запросив ручну оплату. 
 `;
 			for (const waiter of orderEvent.employees) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
@@ -154,7 +154,7 @@ export class OrdersUpdate {
 
 			const text = `
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
-Добавлен пользователь ${orderEvent.user.name} 
+Доданий користувач ${orderEvent.user.name} 
 `;
 			for (const waiter of orderEvent.employees) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
@@ -177,7 +177,7 @@ export class OrdersUpdate {
 
 			const text = `
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
-Добавлен стол ${orderEvent.table}
+Доданий стіл ${orderEvent.table}
 `;
 			for (const waiter of orderEvent.employees) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
@@ -200,7 +200,7 @@ export class OrdersUpdate {
 
 			const text = `
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
-Удален стол ${orderEvent.table}
+Вилучений стіл ${orderEvent.table}
 `;
 			for (const waiter of orderEvent.employees) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {

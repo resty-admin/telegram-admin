@@ -15,10 +15,9 @@ export class CommandsUpdate {
 			return;
 		}
 
-		console.log('command', command);
 		try {
 			const text = `
-${command.command.description} за стол: ${command.table.name || command.table.code}. 
+${command.command.description} за стіл: ${command.table.name || command.table.code}. 
 `;
 			for (const waiter of command.waiters) {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
