@@ -5,7 +5,6 @@ export const environment = {
 	botToken: "",
 	botDomain: "",
 	wsUrl: "",
-	apiDomain: "",
 	apiUrl: "",
 	appUrl: "",
 	hookPath: "/webhooks",
