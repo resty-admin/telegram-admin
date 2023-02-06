@@ -16,7 +16,7 @@ import { API_CONFIG, JWT_CONFIG, TELEGRAF_CONFIG } from "./configs";
 		TelegrafModule.forRootAsync(TELEGRAF_CONFIG),
 		ApiModule.forRoot(API_CONFIG),
 		JwtModule.forRoot(JWT_CONFIG),
-		SocketIoClientModule.forRoot(environment.apiDomain),
+		SocketIoClientModule.forRoot(environment.wsUrl),
 		BotModule,
 		AuthModule,
 		OrdersModule,

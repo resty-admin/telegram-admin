@@ -4,7 +4,7 @@ export const environment = {
 	port: 3002,
 	botToken: "",
 	botDomain: "",
-	apiDomain: "",
+	wsUrl: "",
 	apiUrl: "",
 	appUrl: "",
 	hookPath: "/webhooks",

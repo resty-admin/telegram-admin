@@ -1,17 +1,33 @@
 import { Injectable } from "@nestjs/common";
 import { ApiService } from "src/app/shared/api";
-import { DYNAMIC_ID } from "src/app/shared/constants";
-import { ORDERS_ENDPOINTS } from "src/app/shared/endpoints";
+import { ApolloService } from "src/app/shared/apollo/apollo.service";
+
+// const ORDER_QUERY = gql`
+// 	query Order($orderId: String) {
+// 		order(id: $orderId) {
+// 			id
+// 			productsToOrders {
+// 				id
+// 				status
+// 			}
+// 		}
+// 	}
+// `;
 
 @Injectable()
 export class OrdersService {
-	constructor(private readonly _apiService: ApiService) {}
+	constructor(private readonly _apiService: ApiService, private readonly _apolloService: ApolloService) {}
 
 	async confirmPayment(id: string) {
-		await this._apiService.post(ORDERS_ENDPOINTS.CONFIRM_PAYMENT.replace(DYNAMIC_ID, id));
+		console.log("confirmPayment", id);
 	}
 
 	async confirmOrder(id: string) {
-		await this._apiService.post(ORDERS_ENDPOINTS.CONFRIM_ORDER.replace(DYNAMIC_ID, id));
+		console.log("id", id);
+		// const query = await this._apolloService.client.query({
+		// 	query: ORDER_QUERY,
+		// 	variables: { orderId: "b2eff88a-5875-443f-9555-c0a56168d5c6" }
+		// });
+		// console.log("data", query.data);
 	}
 }
