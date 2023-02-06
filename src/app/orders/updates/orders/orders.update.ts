@@ -45,7 +45,7 @@ export class OrdersUpdate {
 			reply_markup: {
 				inline_keyboard: [
 					[
-						{ text: "Confirm Products", callback_data: CONFIRM_ORDER.source.replace(ANY_SYMBOL, "products") },
+						{ text: "Confirm Order", callback_data: CONFIRM_ORDER.source.replace(ANY_SYMBOL, "order") },
 						{ text: "Confirm Payment", callback_data: CONFIRM_ORDER.source.replace(ANY_SYMBOL, "payment") }
 					]
 				]
