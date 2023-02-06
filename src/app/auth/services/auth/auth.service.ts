@@ -25,6 +25,7 @@ export class AuthService {
 			return this._jwtService.decode<IUser>(accessToken);
 		} catch (error) {
 			console.error(error);
+			return null;
 		}
 	}
 }
