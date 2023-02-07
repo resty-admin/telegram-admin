@@ -59,19 +59,19 @@ export class OrdersUpdate {
 			return;
 		}
 
-		try {
-			const { orderNumber, table, type } = orderEvent.order;
+		const { orderNumber, table, type } = orderEvent.order;
 
-			const text = `
+		const text = `
 Новый заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
 `;
-			for (const waiter of orderEvent.employees) {
+		for (const waiter of orderEvent.employees) {
+			try {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
+			} catch (error) {
+				console.error(error);
 			}
-		} catch (error) {
-			console.error(error);
 		}
 	}
 
@@ -81,19 +81,19 @@ export class OrdersUpdate {
 			return;
 		}
 
-		try {
-			const { orderNumber, table, type } = orderEvent.order;
+		const { orderNumber, table, type } = orderEvent.order;
 
-			const text = `
+		const text = `
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} з типом <b>${type}</b> закрыт. 
 `;
-			for (const waiter of orderEvent.employees) {
+		for (const waiter of orderEvent.employees) {
+			try {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
+			} catch (error) {
+				console.error(error);
 			}
-		} catch (error) {
-			console.error(error);
 		}
 	}
 
@@ -103,20 +103,20 @@ export class OrdersUpdate {
 			return;
 		}
 
-		try {
-			const { orderNumber, table, type } = orderEvent.order;
+		const { orderNumber, table, type } = orderEvent.order;
 
-			const text = `
+		const text = `
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} з типом <b>${type}</b>.
 Нові страви очікують на підтвердження. 
 `;
-			for (const waiter of orderEvent.employees) {
+		for (const waiter of orderEvent.employees) {
+			try {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
+			} catch (error) {
+				console.error(error);
 			}
-		} catch (error) {
-			console.error(error);
 		}
 	}
 
@@ -126,20 +126,20 @@ export class OrdersUpdate {
 			return;
 		}
 
-		try {
-			const { orderNumber, table, type } = orderEvent.order;
+		const { orderNumber, table, type } = orderEvent.order;
 
-			const text = `
+		const text = `
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
 Користувач запросив ручну оплату. 
 `;
-			for (const waiter of orderEvent.employees) {
+		for (const waiter of orderEvent.employees) {
+			try {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
+			} catch (error) {
+				console.error(error);
 			}
-		} catch (error) {
-			console.error(error);
 		}
 	}
 
@@ -149,20 +149,20 @@ export class OrdersUpdate {
 			return;
 		}
 
-		try {
-			const { orderNumber, table, type } = orderEvent.order;
+		const { orderNumber, table, type } = orderEvent.order;
 
-			const text = `
+		const text = `
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
 Доданий користувач ${orderEvent.user.name} 
 `;
-			for (const waiter of orderEvent.employees) {
+		for (const waiter of orderEvent.employees) {
+			try {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
+			} catch (error) {
+				console.error(error);
 			}
-		} catch (error) {
-			console.error(error);
 		}
 	}
 
@@ -172,20 +172,20 @@ export class OrdersUpdate {
 			return;
 		}
 
-		try {
-			const { orderNumber, table, type } = orderEvent.order;
+		const { orderNumber, table, type } = orderEvent.order;
 
-			const text = `
+		const text = `
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
 Доданий стіл ${orderEvent.table}
 `;
-			for (const waiter of orderEvent.employees) {
+		for (const waiter of orderEvent.employees) {
+			try {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
+			} catch (error) {
+				console.error(error);
 			}
-		} catch (error) {
-			console.error(error);
 		}
 	}
 
@@ -195,20 +195,20 @@ export class OrdersUpdate {
 			return;
 		}
 
-		try {
-			const { orderNumber, table, type } = orderEvent.order;
+		const { orderNumber, table, type } = orderEvent.order;
 
-			const text = `
+		const text = `
 Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
 Вилучений стіл ${orderEvent.table}
 `;
-			for (const waiter of orderEvent.employees) {
+		for (const waiter of orderEvent.employees) {
+			try {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
+			} catch (error) {
+				console.error(error);
 			}
-		} catch (error) {
-			console.error(error);
 		}
 	}
 }

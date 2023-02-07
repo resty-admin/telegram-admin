@@ -12,7 +12,11 @@ export class CommandsService {
 
 		const text = `${command.name} для столу №${table.code}`;
 		for (const waiter of table.waiters) {
-			await this._bot.telegram.sendMessage(waiter.user.telegramId, text);
+			try {
+				await this._bot.telegram.sendMessage(waiter.user.telegramId, text);
+			} catch (error) {
+				console.error(error);
+			}
 		}
 	}
 }
