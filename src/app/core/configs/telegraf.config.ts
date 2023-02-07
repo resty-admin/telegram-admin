@@ -1,14 +1,12 @@
 import type { TelegrafModuleAsyncOptions } from "nestjs-telegraf";
 
 import { environment } from "../../../environments/environment";
-import { AuthModule } from "../../auth/auth.module";
-import { AuthUpdate } from "../../auth/updates";
 
 export const TELEGRAF_CONFIG: TelegrafModuleAsyncOptions = {
-	imports: [AuthModule],
-	useFactory: (authUpdate: AuthUpdate) => ({
+	// imports: [AuthModule],
+	useFactory: () => ({
 		token: environment.botToken,
-		middlewares: [authUpdate.middleware.bind(authUpdate)],
+		// middlewares: [authUpdate.middleware.bind(authUpdate)],
 		...(environment.production
 			? {
 					launchOptions: {
@@ -27,5 +25,5 @@ export const TELEGRAF_CONFIG: TelegrafModuleAsyncOptions = {
 			  })
 	}),
 
-	inject: [AuthUpdate]
+	inject: []
 };

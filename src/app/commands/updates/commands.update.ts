@@ -15,17 +15,17 @@ export class CommandsUpdate {
 			return;
 		}
 
-		try {
-			const text = `
+		const text = `
 ${command.command.description} за стіл: ${command.table.name || command.table.code}. 
 `;
-			for (const waiter of command.waiters) {
+		for (const waiter of command.waiters) {
+			try {
 				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
 					parse_mode: "HTML"
 				});
+			} catch (error) {
+				console.error(error);
 			}
-		} catch (error) {
-			console.error(error);
 		}
 	}
 }
