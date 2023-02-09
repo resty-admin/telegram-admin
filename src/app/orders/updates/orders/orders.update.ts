@@ -62,7 +62,7 @@ export class OrdersUpdate {
 		const { orderNumber, table, type } = orderEvent.order;
 
 		const text = `
-Новый заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
+Нове замовлення <b>${orderNumber}</b> за столом: ${table.name || table.code} з типом <b>${type}</b>.
 `;
 		for (const waiter of orderEvent.employees) {
 			try {
@@ -84,7 +84,7 @@ export class OrdersUpdate {
 		const { orderNumber, table, type } = orderEvent.order;
 
 		const text = `
-Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} з типом <b>${type}</b> закрыт. 
+Замовлення <b>${orderNumber}</b> за столом: ${table.name || table.code} з типом <b>${type}</b> закрито. 
 `;
 		for (const waiter of orderEvent.employees) {
 			try {
@@ -106,7 +106,7 @@ export class OrdersUpdate {
 		const { orderNumber, table, type } = orderEvent.order;
 
 		const text = `
-Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} з типом <b>${type}</b>.
+Замовлення <b>${orderNumber}</b> за столом: ${table.name || table.code} з типом <b>${type}</b>.
 Нові страви очікують на підтвердження. 
 `;
 		for (const waiter of orderEvent.employees) {
@@ -129,7 +129,7 @@ export class OrdersUpdate {
 		const { orderNumber, table, type } = orderEvent.order;
 
 		const text = `
-Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
+Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} з типом <b>${type}</b>.
 Користувач запросив ручну оплату. 
 `;
 		for (const waiter of orderEvent.employees) {
@@ -152,7 +152,7 @@ export class OrdersUpdate {
 		const { orderNumber, table, type } = orderEvent.order;
 
 		const text = `
-Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
+Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} з типом <b>${type}</b>.
 Доданий користувач ${orderEvent.user.name} 
 `;
 		for (const waiter of orderEvent.employees) {
@@ -175,7 +175,7 @@ export class OrdersUpdate {
 		const { orderNumber, table, type } = orderEvent.order;
 
 		const text = `
-Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
+Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} з типом <b>${type}</b>.
 Доданий стіл ${orderEvent.table}
 `;
 		for (const waiter of orderEvent.employees) {
@@ -198,7 +198,7 @@ export class OrdersUpdate {
 		const { orderNumber, table, type } = orderEvent.order;
 
 		const text = `
-Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} с типом <b>${type}</b>.
+Заказ <b>${orderNumber}</b> за столом: ${table.name || table.code} з типом <b>${type}</b>.
 Вилучений стіл ${orderEvent.table}
 `;
 		for (const waiter of orderEvent.employees) {
