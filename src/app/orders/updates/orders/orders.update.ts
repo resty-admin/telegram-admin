@@ -89,6 +89,29 @@ export class OrdersUpdate {
 		}
 	}
 
+
+	@OnSocketEvent(OrdersEvents.REQUEST_TO_CONFIRM)
+	async orderRequestToConfirmNotifyWaiter(orderEvent: IOrderEvent) {
+		if (orderEvent.employees.length === 0) {
+			return;
+		}
+
+		const { code, table, type } = orderEvent.order;
+
+		const text = `
+Потрібне підтвердження <b>${code}</b> за столом: ${table.name || table.code} з типом <b>${typesText[type]}</b>.
+`;
+		for (const waiter of orderEvent.employees) {
+			try {
+				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
+					parse_mode: "HTML"
+				});
+			} catch (error) {
+				console.error(error);
+			}
+		}
+	}
+
 	@OnSocketEvent(OrdersEvents.CLOSED)
 	async orderClosedNotifyWaiter(orderEvent: IOrderEvent) {
 		if (orderEvent.employees.length === 0) {
