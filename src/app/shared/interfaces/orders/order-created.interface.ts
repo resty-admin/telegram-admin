@@ -8,6 +8,10 @@ export interface IOrderEvent {
 	employees: IUser[];
 }
 
+export interface IOrderEventPtos extends IOrderEvent {
+	pTos: any[];
+}
+
 export interface IOrderEventUserAdded extends IOrderEvent {
 	user: IUser;
 }

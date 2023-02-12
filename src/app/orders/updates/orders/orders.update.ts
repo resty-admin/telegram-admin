@@ -1,5 +1,5 @@
 import { Action, Hears, InjectBot, Update } from "nestjs-telegraf";
-import { IStateContext } from "src/app/shared";
+import {IOrderEventPtos, IStateContext} from "src/app/shared";
 import { ANY_SYMBOL } from "src/app/shared/constants";
 import { OrdersEvents } from "src/app/shared/enums";
 import { IOrderEvent, IOrderEventTableAdded, IOrderEventUserAdded } from "src/app/shared/interfaces/orders";
@@ -115,7 +115,7 @@ export class OrdersUpdate {
 		}
 	}
 
-	@OnSocketEvent(OrdersEvents.CANCELED)
+	@OnSocketEvent(OrdersEvents.CLOSED)
 	async orderClosedNotifyWaiter(orderEvent: IOrderEvent) {
 		if (orderEvent.employees.length === 0) {
 			return;
@@ -163,7 +163,7 @@ export class OrdersUpdate {
 	}
 
 	@OnSocketEvent(OrdersEvents.WAITING_FOR_MANUAL_PAY)
-	async orderWaitingForManualPayNotifyWaiter(orderEvent: IOrderEvent) {
+	async orderWaitingForManualPayNotifyWaiter(orderEvent: IOrderEventPtos) {
 		if (orderEvent.employees.length === 0) {
 			return;
 		}
@@ -172,6 +172,9 @@ export class OrdersUpdate {
 
 		const text = `
 Заказ <b>${code}</b> ${table ? `за столом: ${table.name || table.code}` : ""} з типом <b>${typesText[type]}</b>.
+Страви: ${
+			orderEvent.pTos.reduce((pre, curr) => pre + (pre ? ", " : "") + curr.product.name, '')
+		}
 Користувач запросив ручну оплату. 
 `;
 		for (const waiter of orderEvent.employees) {
@@ -186,7 +189,7 @@ export class OrdersUpdate {
 	}
 
 	@OnSocketEvent(OrdersEvents.PAYMENT_SUCCESS)
-	async orderPaymentSuccessNotifyWaiter(orderEvent: IOrderEvent) {
+	async orderPaymentSuccessNotifyWaiter(orderEvent: IOrderEventPtos) {
 		if (orderEvent.employees.length === 0) {
 			return;
 		}
@@ -195,6 +198,9 @@ export class OrdersUpdate {
 
 		const text = `
 Заказ <b>${code}</b> ${table ? `за столом: ${table.name || table.code}` : ""} з типом <b>${typesText[type]}</b>.
+Страви: ${
+			orderEvent.pTos.reduce((pre, curr) => pre + (pre ? ", " : "") + curr.product.name, '')
+		}
 Користувач оплатив замовлення. 
 `;
 		for (const waiter of orderEvent.employees) {
