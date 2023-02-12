@@ -139,6 +139,30 @@ export class OrdersUpdate {
 		}
 	}
 
+	@OnSocketEvent(OrdersEvents.CANCELED)
+	async orderCanceledNotifyWaiter(orderEvent: IOrderEvent) {
+		if (orderEvent.employees.length === 0) {
+			return;
+		}
+
+		const { code, table, type } = orderEvent.order;
+
+		const text = `
+Замовлення <b>${code}</b> ${table ? `за столом: ${table.name || table.code}` : ""} з типом <b>${
+			typesText[type]
+		}</b> закрито. 
+`;
+		for (const waiter of orderEvent.employees) {
+			try {
+				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
+					parse_mode: "HTML"
+				});
+			} catch (error) {
+				console.error(error);
+			}
+		}
+	}
+
 	@OnSocketEvent(OrdersEvents.CONFIRM)
 	async orderConfirmNotifyWaiter(orderEvent: IOrderEvent) {
 		if (orderEvent.employees.length === 0) {
