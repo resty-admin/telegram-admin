@@ -115,7 +115,7 @@ export class OrdersUpdate {
 		}
 	}
 
-	@OnSocketEvent(OrdersEvents.CLOSED)
+	@OnSocketEvent(OrdersEvents.CANCELED)
 	async orderClosedNotifyWaiter(orderEvent: IOrderEvent) {
 		if (orderEvent.employees.length === 0) {
 			return;
@@ -173,6 +173,29 @@ export class OrdersUpdate {
 		const text = `
 Заказ <b>${code}</b> ${table ? `за столом: ${table.name || table.code}` : ""} з типом <b>${typesText[type]}</b>.
 Користувач запросив ручну оплату. 
+`;
+		for (const waiter of orderEvent.employees) {
+			try {
+				await this._bot.telegram.sendMessage(waiter.telegramId, text, {
+					parse_mode: "HTML"
+				});
+			} catch (error) {
+				console.error(error);
+			}
+		}
+	}
+
+	@OnSocketEvent(OrdersEvents.PAYMENT_SUCCESS)
+	async orderPaymentSuccessNotifyWaiter(orderEvent: IOrderEvent) {
+		if (orderEvent.employees.length === 0) {
+			return;
+		}
+
+		const { code, table, type } = orderEvent.order;
+
+		const text = `
+Заказ <b>${code}</b> ${table ? `за столом: ${table.name || table.code}` : ""} з типом <b>${typesText[type]}</b>.
+Користувач оплатив замовлення. 
 `;
 		for (const waiter of orderEvent.employees) {
 			try {
