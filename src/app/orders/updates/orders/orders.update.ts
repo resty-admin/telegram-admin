@@ -241,7 +241,7 @@ export class OrdersUpdate {
 
 		const text = `
 Заказ <b>${code}</b> ${table ? `за столом: ${table.name || table.code}` : ""} з типом <b>${typesText[type]}</b>.
-Доданий стіл ${orderEvent.table}
+Доданий стіл ${orderEvent.table.name}
 `;
 		for (const waiter of orderEvent.employees) {
 			try {
@@ -264,7 +264,7 @@ export class OrdersUpdate {
 
 		const text = `
 Заказ <b>${code}</b> ${table ? `за столом: ${table.name || table.code}` : ""} з типом <b>${typesText[type]}</b>.
-Вилучений стіл ${orderEvent.table}
+Вилучений стіл ${orderEvent.table.name}
 `;
 		for (const waiter of orderEvent.employees) {
 			try {
