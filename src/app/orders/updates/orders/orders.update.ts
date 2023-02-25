@@ -30,11 +30,11 @@ export class OrdersUpdate {
 	constructor(@InjectBot() private readonly _bot: Telegraf, private readonly _ordersService: OrdersService) {}
 
 	async replyWithOrder(orderEvent: any, customTemplate: string = "") {
-		if (orderEvent.employees.length === 0) {
+		const { id, code, table, type, place, startDate, pTos, employees, users } = orderEvent;
+
+		if (employees.length === 0) {
 			return;
 		}
-
-		const { id, code, table, type, place, startDate, pTos } = orderEvent.order;
 
 		const messages = [`<b>Заведение:</b> ${place.name}`, `<b>Заказ:</b> ${code} з типом <b>${typesText[type]}</b>`];
 
@@ -46,22 +46,21 @@ export class OrdersUpdate {
 			messages.push(`<b>Дата:</b> ${dayjs(startDate).format(DAYJS_DISPLAY_FORMAT)}`);
 		}
 
+		if ((users || []).length > 0) {
+			messages.push(`<b>Гості:</b> ${users.reduce((pre, curr) => pre + (pre ? ", " : "") + curr.name, "")}`);
+		}
+
 		if ((pTos || []).length > 0) {
-			messages.push(
-				`<b>Страви:<b> ${(orderEvent?.pTos || []).reduce(
-					(pre, curr) => pre + (pre ? ", " : "") + curr.product.name,
-					""
-				)}`
-			);
+			messages.push(`<b>Страви:</b> ${pTos.reduce((pre, curr) => pre + (pre ? ", " : "") + curr.product.name, "")}`);
 		}
 
 		if (customTemplate) {
 			messages.push("---", customTemplate);
 		}
 
-		for (const waiter of orderEvent.employees) {
+		for (const employee of employees.filter((employee) => employee.telegramId)) {
 			try {
-				await this._bot.telegram.sendMessage(waiter.telegramId, messages.join("\n"), {
+				await this._bot.telegram.sendMessage(employee.telegramId, messages.join("\n"), {
 					parse_mode: "HTML",
 					reply_markup: {
 						inline_keyboard: [
@@ -99,7 +98,7 @@ export class OrdersUpdate {
 
 	@OnSocketEvent(OrdersEvents.CANCELED)
 	async orderCanceledNotifyWaiter(orderEvent: IOrderEvent) {
-		this.replyWithOrder(orderEvent, `Відхилено`);
+		this.replyWithOrder(orderEvent, `Відмінено`);
 	}
 
 	@OnSocketEvent(OrdersEvents.CONFIRM)
