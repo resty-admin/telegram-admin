@@ -1,9 +1,15 @@
+import "dayjs/locale/uk";
+
 import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import * as dayjs from "dayjs";
 import { getBotToken } from "nestjs-telegraf";
 
 import { AppModule } from "./app/app.module";
 import { environment } from "./environments/environment";
+
+dayjs.locale("uk"); // use locale globally
+// dayjs.extend(customParseFormat);
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);

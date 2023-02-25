@@ -26,4 +26,6 @@ export interface IOrder {
 	usersToOrders?: IUserToOrder[];
 
 	waiters: IUser[];
+
+	startDate: string;
 }

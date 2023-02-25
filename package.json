@@ -58,6 +58,7 @@
 		"class-validator": "^0.14.0",
 		"cloudipsp-node-js-sdk": "^1.0.5",
 		"cross-fetch": "^3.1.5",
+		"dayjs": "^1.11.7",
 		"graphql": "^16.6.0",
 		"lodash": "^4.17.21",
 		"multer": "2.0.0-rc.4",
