@@ -20,7 +20,7 @@ export class BotUpdate {
 
 		await context.reply(text, {
 			reply_markup: {
-				inline_keyboard: [[{ text: "Почати", web_app: { url: environment.appUrl } }]]
+				inline_keyboard: [[{ text: "Почати", web_app: { url: `${environment.appUrl}?from=telegram` } }]]
 			}
 		});
 	}
