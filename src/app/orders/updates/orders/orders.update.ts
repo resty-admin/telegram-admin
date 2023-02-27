@@ -30,6 +30,8 @@ export class OrdersUpdate {
 	constructor(@InjectBot() private readonly _bot: Telegraf, private readonly _ordersService: OrdersService) {}
 
 	async replyWithOrder(orderEvent: any, customTemplate: string = "") {
+		console.log(orderEvent);
+
 		const { id, code, table, type, place, startDate, pTos, employees, users } = orderEvent;
 
 		if (employees.length === 0) {
