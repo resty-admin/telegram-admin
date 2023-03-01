@@ -18,6 +18,8 @@ export class BotUpdate {
 			await context.replyWithSticker(STICKERS.hello);
 		}
 
+		console.log('STARTED!');
+
 		await context.reply(text, {
 			reply_markup: {
 				inline_keyboard: [[{ text: "Почати", web_app: { url: `${environment.appUrl}?from=telegram` } }]]
