@@ -23,13 +23,14 @@ export class SocketIoClientModule {
 					useFactory: async () => {
 						const { io } = await import("socket.io-client");
 
-						const socketIo = io(url, { autoConnect: true, ...options });
+						const socket = io(url, { autoConnect: true, ...options });
 
-						socketIo.on("connected", () => {
-							console.log("connected");
+						socket.on("*", (event, data) => {
+							console.log(event);
+							console.log(data);
 						});
 
-						return socketIo;
+						return socket;
 					}
 				},
 				SocketIoEventLoader
