@@ -40,5 +40,6 @@ jobs:
             cd /home/resty/k8s
             kubectl apply -f cloudflared.yaml
             cd /home/resty/telegram-admin
-            kubectl delete -f telegram-admin.k8s.yaml
             kubectl apply -f telegram-admin.k8s.yaml
+            kubectl rollout restart deployment prod-telegram-admin-k8s-deployment
+          
