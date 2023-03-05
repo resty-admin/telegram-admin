@@ -110,7 +110,7 @@ export class OrdersUpdate {
 
 	@OnSocketEvent(OrdersEvents.WAITING_FOR_MANUAL_PAY)
 	async orderWaitingForManualPayNotifyWaiter(orderEvent: IOrderEventPtos) {
-		this.replyWithOrder(orderEvent, `Користувач запросив ручну оплату.`);
+		this.replyWithOrder(orderEvent, `Користувач запросив ручну оплату. Тип: ${orderEvent.manualType}`);
 	}
 
 	@OnSocketEvent(OrdersEvents.PAYMENT_SUCCESS)
