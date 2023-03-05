@@ -23,6 +23,11 @@ const typesText = {
 	[OrderTypeEnum.DELIVERY]: "Доставка"
 };
 
+const manualPaymentText = {
+	CASH: "готівкою",
+	TERMINAL: "термінал"
+};
+
 export const DAYJS_DISPLAY_FORMAT = "DD MMMM, HH:mm";
 
 @Update()
@@ -110,7 +115,10 @@ export class OrdersUpdate {
 
 	@OnSocketEvent(OrdersEvents.WAITING_FOR_MANUAL_PAY)
 	async orderWaitingForManualPayNotifyWaiter(orderEvent: IOrderEventPtos) {
-		this.replyWithOrder(orderEvent, `Користувач запросив ручну оплату. Тип: ${orderEvent.manualType}`);
+		this.replyWithOrder(
+			orderEvent,
+			`Користувач запросив ручну оплату. Тип: ${manualPaymentText[orderEvent.manualType]}`
+		);
 	}
 
 	@OnSocketEvent(OrdersEvents.PAYMENT_SUCCESS)
