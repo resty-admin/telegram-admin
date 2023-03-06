@@ -23,6 +23,11 @@ const typesText = {
 	[OrderTypeEnum.DELIVERY]: "Доставка"
 };
 
+const manualPaymentText = {
+	CASH: "готівкою",
+	TERMINAL: "термінал"
+};
+
 export const DAYJS_DISPLAY_FORMAT = "DD MMMM, HH:mm";
 
 @Update()
@@ -30,6 +35,8 @@ export class OrdersUpdate {
 	constructor(@InjectBot() private readonly _bot: Telegraf, private readonly _ordersService: OrdersService) {}
 
 	async replyWithOrder(orderEvent: any, customTemplate: string = "") {
+		console.log({ customTemplate, orderEvent });
+
 		const { id, code, table, type, place, startDate, pTos, employees, users } = orderEvent;
 
 		if (employees.length === 0) {
@@ -108,7 +115,10 @@ export class OrdersUpdate {
 
 	@OnSocketEvent(OrdersEvents.WAITING_FOR_MANUAL_PAY)
 	async orderWaitingForManualPayNotifyWaiter(orderEvent: IOrderEventPtos) {
-		this.replyWithOrder(orderEvent, `Користувач запросив ручну оплату.`);
+		this.replyWithOrder(
+			orderEvent,
+			`Користувач запросив ручну оплату. Тип: ${manualPaymentText[orderEvent.manualType]}`
+		);
 	}
 
 	@OnSocketEvent(OrdersEvents.PAYMENT_SUCCESS)

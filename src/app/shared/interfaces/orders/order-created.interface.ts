@@ -10,6 +10,7 @@ export interface IOrderEvent {
 
 export interface IOrderEventPtos extends IOrderEvent {
 	pTos: any[];
+	manualType?: any;
 }
 
 export interface IOrderEventUserAdded extends IOrderEvent {
